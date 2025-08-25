@@ -18,8 +18,8 @@
   </metadata>
   <files>
     <!-- Library binaries -->
-    <file src="bin/Release/net8.0/Notmat.Xliff.dll" target="lib/net8.0/" />
-    <file src="bin/Release/net8.0/Notmat.Xliff.pdb" target="lib/net8.0/" />
+    <file src="bin/Release/net9.0/Notmat.Xliff.dll" target="lib/net9.0/" />
+    <file src="bin/Release/net9.0/Notmat.Xliff.pdb" target="lib/net9.0/" />
 
     <!-- Package Readme and Icon -->
     <file src="../README.md" target="README.md" />
