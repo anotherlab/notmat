@@ -4,6 +4,31 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+
+    <!-- NuGet package metadata for csproj-based packing -->
+    <PackageId>Notmat.Xliff</PackageId>
+    <Version>0.1.0</Version>
+    <Title>Notmat XLIFF Library</Title>
+    <Authors>Chris Miller; Danny Del Grosso</Authors>
+    <Description>A comprehensive C# library for working with XLIFF (XML Localization Interchange File Format) files, supporting both XLIFF 1.2 and XLIFF 2.0 specifications. Includes converters to and from .resx.</Description>
+    <PackageTags>xliff;localization;l10n;i18n;resx;translation</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/anotherlab/notmat</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/anotherlab/notmat</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>icon.png</PackageIcon>
+
+    <!-- Optional: include XML docs in package without warning noise for missing comments -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
   </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Include README and icon in the package -->
+    <None Include="..\README.md" Pack="true" PackagePath="README.md" />
+    <None Include="..\images\logo 1 128.png" Pack="true" PackagePath="icon.png" />
+  </ItemGroup>
 
 </Project>

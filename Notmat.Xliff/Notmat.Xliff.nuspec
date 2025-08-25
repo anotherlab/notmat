@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>Notmat.Xliff</id>
+    <version>0.1.0</version>
+    <title>Notmat XLIFF Library</title>
+    <authors>Chris Miller; Danny Del Grosso</authors>
+    <owners>anotherlab</owners>
+    <license type="expression">MIT</license>
+    <projectUrl>https://github.com/anotherlab/notmat</projectUrl>
+    <repository type="git" url="https://github.com/anotherlab/notmat" />
+    <icon>icon.png</icon>
+    <readme>README.md</readme>
+    <description>A comprehensive C# library for working with XLIFF (XML Localization Interchange File Format) files, supporting both XLIFF 1.2 and XLIFF 2.0 specifications. Includes converters to and from .resx.</description>
+    <summary>XLIFF 1.2 and 2.0 library with RESX converters.</summary>
+    <tags>xliff localization l10n i18n resx translation</tags>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+  </metadata>
+  <files>
+    <!-- Library binaries -->
+    <file src="bin/Release/net8.0/Notmat.Xliff.dll" target="lib/net8.0/" />
+    <file src="bin/Release/net8.0/Notmat.Xliff.pdb" target="lib/net8.0/" />
+
+    <!-- Package Readme and Icon -->
+    <file src="../README.md" target="README.md" />
+    <file src="../images/logo 1 128.png" target="icon.png" />
+  </files>
+</package>
