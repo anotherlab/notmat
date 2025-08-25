@@ -472,6 +472,23 @@ dotnet test
 dotnet pack
 ```
 
+## NuGet package
+
+To create the NuGet package (.nupkg) for Notmat.Xliff using csproj-based packing:
+
+```pwsh
+# From the repository root
+# Build and pack the library in Release
+ dotnet pack Notmat.Xliff/Notmat.Xliff.csproj -c Release -o dist
+```
+
+The package will be placed in the `dist/` folder. To publish to NuGet.org:
+
+```pwsh
+# Replace with your actual API key
+ dotnet nuget push dist/*.nupkg --api-key $env:NUGET_API_KEY --source https://api.nuget.org/v3/index.json
+```
+
 ## Contributing
 
 1. Fork the repository
