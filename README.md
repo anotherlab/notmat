@@ -10,24 +10,25 @@ Notmat is not a replacement for Multilingual App Toolkit. And that's OK. The ini
 
 ## Features
 
-- ✅ **Multi-Version Support**: Works with XLIFF 1.2 and XLIFF 2.0 formats
-- ✅ **File I/O Operations**: Load and save XLIFF files with automatic version detection
-- ✅ **Translation State Management**: Full support for translation states and approval workflows
-- ✅ **RESX Integration**: Convert between XLIFF and .NET .resx resource files
-- ✅ **Async Support**: Asynchronous file operations for better performance
-- ✅ **Type Safety**: Strongly-typed models with XML serialization attributes
-- ✅ **Comprehensive API**: Easy-to-use classes for common localization workflows
+- ☑️ **Multi-Version Support**: Works with XLIFF 1.2 and XLIFF 2.0 formats
+- ☑️ **File I/O Operations**: Load and save XLIFF files with automatic version detection
+- ☑️ **Translation State Management**: Full support for translation states and approval workflows
+- ☑️ **RESX Integration**: Convert between XLIFF and .NET .resx resource files
+- ☑️ **Async Support**: Asynchronous file operations for better performance
+- ☑️ **Type Safety**: Strongly-typed models with XML serialization attributes
+- ☑️ **Comprehensive API**: Easy-to-use classes for common localization workflows
 
 ## Planned Features
 
-- 🟩 Import/export to Javascript dictionary files
-- 🟩 Visual XLIFF editor for Windows & MacOs
-- 🟩 Command line tools
-  - 🟩 Scanning code for etxt strings
-  - 🟩 Generate XLIFF from REX
-  - 🟩 Add new language to XLIFF
-  - 🟩 Generate REX from XLIFF
-- 🟩 Package availability via Nuget
+- ◻️ **AI Translation**: Use AI to do translations
+- ◻️ **Other format**: Import/export to Javascript, Android, Apple
+- ◻️ **Editor**: Visual XLIFF editor for Windows & MacOs
+- ◻️ **Command line tools**
+  - ◻️ Scanning code for etxt strings
+  - ◻️ Generate XLIFF from REX
+  - ◻️ Add new language to XLIFF
+  - ◻️ Generate REX from XLIFF
+- ◻️ **Nuget**: Package availability via Nuget
 
 ## Installation (at some point)
 
