@@ -1,6 +1,12 @@
 # Notmat XLIFF Library
+![Logo](/images/logo%201%20128.png)
 
 A comprehensive C# library for working with XLIFF (XML Localization Interchange File Format) files, supporting both XLIFF 1.2 and XLIFF 2.0 specifications.
+
+## Inspiration ##
+The idea to create this library was inspired by Microsoft's Multilingual App Toolkit. This project shares no code or other assets with the Multilingual App Toolkit. The Multilingual App Toolkit was [deprecated by Microsoft](https://learn.microsoft.com/en-us/windows/apps/design/globalizing/mat-announcements) and will no longer be supported after October 15, 2025.
+
+Notmat is not a replacement for Multilingual App Toolkit. And that's OK. The initial code base was created with generous amounts of AI suggestions. And that's OK too.
 
 ## Features
 
@@ -12,7 +18,18 @@ A comprehensive C# library for working with XLIFF (XML Localization Interchange 
 - ✅ **Type Safety**: Strongly-typed models with XML serialization attributes
 - ✅ **Comprehensive API**: Easy-to-use classes for common localization workflows
 
-## Installation
+## Planned Features
+
+- 🟩 Import/export to Javascript dictionary files
+- 🟩 Visual XLIFF editor for Windows & MacOs
+- 🟩 Command line tools
+  - 🟩 Scanning code for etxt strings
+  - 🟩 Generate XLIFF from REX
+  - 🟩 Add new language to XLIFF
+  - 🟩 Generate REX from XLIFF
+- 🟩 Package availability via Nuget
+
+## Installation (at some point)
 
 Add the Notmat.Xliff NuGet package to your project:
 
@@ -465,7 +482,7 @@ dotnet pack
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Supported XLIFF Specifications
 
