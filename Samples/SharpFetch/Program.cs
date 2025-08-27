@@ -6,6 +6,7 @@ using System.Net.NetworkInformation;
 using System.Linq;
 using System.Management;
 using System.Globalization;
+using System.Runtime.Versioning;
 
 namespace SharpFetch;
 
@@ -16,7 +17,7 @@ class Program
         // Parse command line arguments
         var options = ParseArguments(args);
         
-        // Set the culture if specified
+        // Set the culture if specified (do this early so error messages can be localized)
         if (!string.IsNullOrEmpty(options.Locale))
         {
             try
@@ -27,7 +28,7 @@ class Program
             }
             catch (CultureNotFoundException)
             {
-                Console.WriteLine($"Warning: Locale '{options.Locale}' not found. Using default locale.");
+                Console.WriteLine(string.Format(Resources.ErrorInvalidLocale, options.Locale));
             }
         }
 
@@ -45,6 +46,27 @@ class Program
     {
         var options = new CommandLineOptions();
 
+        // First pass: look for locale to set it early
+        for (int i = 0; i < args.Length; i++)
+        {
+            if ((args[i].ToLowerInvariant() == "-l" || args[i].ToLowerInvariant() == "--locale") && i + 1 < args.Length)
+            {
+                options.Locale = args[i + 1];
+                try
+                {
+                    var culture = new CultureInfo(options.Locale);
+                    CultureInfo.CurrentCulture = culture;
+                    CultureInfo.CurrentUICulture = culture;
+                }
+                catch (CultureNotFoundException)
+                {
+                    // Will be handled in Main
+                }
+                break;
+            }
+        }
+
+        // Second pass: parse all arguments
         for (int i = 0; i < args.Length; i++)
         {
             switch (args[i].ToLowerInvariant())
@@ -53,11 +75,11 @@ class Program
                 case "--locale":
                     if (i + 1 < args.Length)
                     {
-                        options.Locale = args[++i];
+                        options.Locale = args[++i]; // Already handled in first pass
                     }
                     else
                     {
-                        Console.WriteLine("Error: --locale requires a value (e.g., en-US, es-ES)");
+                        Console.WriteLine(Resources.ErrorMissingLocaleValue);
                         options.ShowHelp = true;
                     }
                     break;
@@ -66,7 +88,7 @@ class Program
                     options.ShowHelp = true;
                     break;
                 default:
-                    Console.WriteLine($"Unknown option: {args[i]}");
+                    Console.WriteLine(string.Format(Resources.ErrorUnknownOption, args[i]));
                     options.ShowHelp = true;
                     break;
             }
@@ -77,22 +99,17 @@ class Program
 
     private static void ShowHelp()
     {
-        Console.WriteLine("SharpFetch - A cross-platform system information utility");
+        Console.WriteLine(Resources.HelpDescription);
         Console.WriteLine();
-        Console.WriteLine("Usage: sharpfetch [options]");
+        Console.WriteLine(Resources.HelpUsage);
         Console.WriteLine();
-        Console.WriteLine("Options:");
-        Console.WriteLine("  -l, --locale <locale>    Set the display language/locale (e.g., en-US, es-ES)");
-        Console.WriteLine("  -h, --help              Show this help message");
+        Console.WriteLine(Resources.HelpOptions);
+        Console.WriteLine(Resources.HelpLocaleOption);
+        Console.WriteLine(Resources.HelpHelpOption);
         Console.WriteLine();
-        Console.WriteLine("Examples:");
-        Console.WriteLine("  sharpfetch                    # Use system default locale");
-        Console.WriteLine("  sharpfetch --locale es-ES     # Use Spanish (Spain) locale");
-        Console.WriteLine("  sharpfetch --locale en-US     # Use English (US) locale");
-        Console.WriteLine();
-        Console.WriteLine("Supported locales:");
-        Console.WriteLine("  en-US    English (United States) - Default");
-        Console.WriteLine("  es-ES    Español (España)");
+        Console.WriteLine(Resources.HelpExamples);
+        Console.WriteLine(Resources.HelpExampleDefault);
+        Console.WriteLine(Resources.HelpExampleSpanish);
     }
 }
 
@@ -469,6 +486,7 @@ public class SystemInfoFetcher
         return RuntimeInformation.FrameworkDescription;
     }
 
+    [SupportedOSPlatform("windows")]
     private string GetWindowsBuild()
     {
         try

@@ -197,4 +197,56 @@
     <value>Windows Terminal</value>
     <comment>Windows Terminal name</comment>
   </data>
+  <data name="HelpUsage" xml:space="preserve">
+    <value>Usage: sharpfetch [OPTIONS]</value>
+    <comment>Help text for usage line</comment>
+  </data>
+  <data name="HelpDescription" xml:space="preserve">
+    <value>A cross-platform system information utility similar to neofetch.</value>
+    <comment>Help text description</comment>
+  </data>
+  <data name="HelpOptions" xml:space="preserve">
+    <value>Options:</value>
+    <comment>Help text options header</comment>
+  </data>
+  <data name="HelpLocaleOption" xml:space="preserve">
+    <value>  --locale &lt;locale&gt;    Set the display language (e.g., en-US, es-ES)</value>
+    <comment>Help text for locale option</comment>
+  </data>
+  <data name="HelpVersionOption" xml:space="preserve">
+    <value>  --version            Show version information</value>
+    <comment>Help text for version option</comment>
+  </data>
+  <data name="HelpHelpOption" xml:space="preserve">
+    <value>  --help               Show this help message</value>
+    <comment>Help text for help option</comment>
+  </data>
+  <data name="HelpExamples" xml:space="preserve">
+    <value>Examples:</value>
+    <comment>Help text examples header</comment>
+  </data>
+  <data name="HelpExampleDefault" xml:space="preserve">
+    <value>  sharpfetch           Show system info in default language</value>
+    <comment>Help text example for default usage</comment>
+  </data>
+  <data name="HelpExampleSpanish" xml:space="preserve">
+    <value>  sharpfetch --locale es-ES    Show system info in Spanish</value>
+    <comment>Help text example for Spanish locale</comment>
+  </data>
+  <data name="VersionInfo" xml:space="preserve">
+    <value>SharpFetch v1.0.0 - A cross-platform system information utility</value>
+    <comment>Version information text</comment>
+  </data>
+  <data name="ErrorUnknownOption" xml:space="preserve">
+    <value>Error: Unknown option '{0}'</value>
+    <comment>Error message for unknown command line option</comment>
+  </data>
+  <data name="ErrorMissingLocaleValue" xml:space="preserve">
+    <value>Error: --locale requires a value (e.g., en-US, es-ES)</value>
+    <comment>Error message when locale option is missing a value</comment>
+  </data>
+  <data name="ErrorInvalidLocale" xml:space="preserve">
+    <value>Error: Invalid locale '{0}'. Using default locale.</value>
+    <comment>Error message for invalid locale format</comment>
+  </data>
 </root>
