@@ -79,6 +79,114 @@ namespace SharpFetch {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error: Invalid locale '{0}'. Using default locale..
+        /// </summary>
+        internal static string ErrorInvalidLocale {
+            get {
+                return ResourceManager.GetString("ErrorInvalidLocale", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error: --locale requires a value (e.g., en-US, es-ES).
+        /// </summary>
+        internal static string ErrorMissingLocaleValue {
+            get {
+                return ResourceManager.GetString("ErrorMissingLocaleValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error: Unknown option '{0}'.
+        /// </summary>
+        internal static string ErrorUnknownOption {
+            get {
+                return ResourceManager.GetString("ErrorUnknownOption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A cross-platform system information utility similar to neofetch..
+        /// </summary>
+        internal static string HelpDescription {
+            get {
+                return ResourceManager.GetString("HelpDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  sharpfetch           Show system info in default language.
+        /// </summary>
+        internal static string HelpExampleDefault {
+            get {
+                return ResourceManager.GetString("HelpExampleDefault", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  sharpfetch --locale es-ES    Show system info in Spanish.
+        /// </summary>
+        internal static string HelpExampleSpanish {
+            get {
+                return ResourceManager.GetString("HelpExampleSpanish", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Examples:.
+        /// </summary>
+        internal static string HelpExamples {
+            get {
+                return ResourceManager.GetString("HelpExamples", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  --help               Show this help message.
+        /// </summary>
+        internal static string HelpHelpOption {
+            get {
+                return ResourceManager.GetString("HelpHelpOption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  --locale &lt;locale&gt;    Set the display language (e.g., en-US, es-ES).
+        /// </summary>
+        internal static string HelpLocaleOption {
+            get {
+                return ResourceManager.GetString("HelpLocaleOption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Options:.
+        /// </summary>
+        internal static string HelpOptions {
+            get {
+                return ResourceManager.GetString("HelpOptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Usage: sharpfetch [OPTIONS].
+        /// </summary>
+        internal static string HelpUsage {
+            get {
+                return ResourceManager.GetString("HelpUsage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  --version            Show version information.
+        /// </summary>
+        internal static string HelpVersionOption {
+            get {
+                return ResourceManager.GetString("HelpVersionOption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Colors:.
         /// </summary>
         internal static string LabelColors {
@@ -219,6 +327,15 @@ namespace SharpFetch {
         internal static string UptimeMinutes {
             get {
                 return ResourceManager.GetString("UptimeMinutes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SharpFetch v1.0.0 - A cross-platform system information utility.
+        /// </summary>
+        internal static string VersionInfo {
+            get {
+                return ResourceManager.GetString("VersionInfo", resourceCulture);
             }
         }
         

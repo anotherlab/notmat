@@ -197,4 +197,56 @@
     <value>Terminal de Windows</value>
     <comment>Nombre del Terminal de Windows</comment>
   </data>
+  <data name="HelpUsage" xml:space="preserve">
+    <value>Uso: sharpfetch [OPCIONES]</value>
+    <comment>Texto de ayuda para línea de uso</comment>
+  </data>
+  <data name="HelpDescription" xml:space="preserve">
+    <value>Una utilidad de información del sistema multiplataforma similar a neofetch.</value>
+    <comment>Texto de descripción de ayuda</comment>
+  </data>
+  <data name="HelpOptions" xml:space="preserve">
+    <value>Opciones:</value>
+    <comment>Encabezado de opciones de ayuda</comment>
+  </data>
+  <data name="HelpLocaleOption" xml:space="preserve">
+    <value>  --locale &lt;idioma&gt;    Establecer el idioma de visualización (ej., en-US, es-ES)</value>
+    <comment>Texto de ayuda para opción de idioma</comment>
+  </data>
+  <data name="HelpVersionOption" xml:space="preserve">
+    <value>  --version            Mostrar información de versión</value>
+    <comment>Texto de ayuda para opción de versión</comment>
+  </data>
+  <data name="HelpHelpOption" xml:space="preserve">
+    <value>  --help               Mostrar este mensaje de ayuda</value>
+    <comment>Texto de ayuda para opción de ayuda</comment>
+  </data>
+  <data name="HelpExamples" xml:space="preserve">
+    <value>Ejemplos:</value>
+    <comment>Encabezado de ejemplos de ayuda</comment>
+  </data>
+  <data name="HelpExampleDefault" xml:space="preserve">
+    <value>  sharpfetch           Mostrar información del sistema en idioma predeterminado</value>
+    <comment>Texto de ejemplo de ayuda para uso predeterminado</comment>
+  </data>
+  <data name="HelpExampleSpanish" xml:space="preserve">
+    <value>  sharpfetch --locale es-ES    Mostrar información del sistema en español</value>
+    <comment>Texto de ejemplo de ayuda para idioma español</comment>
+  </data>
+  <data name="VersionInfo" xml:space="preserve">
+    <value>SharpFetch v1.0.0 - Una utilidad de información del sistema multiplataforma</value>
+    <comment>Texto de información de versión</comment>
+  </data>
+  <data name="ErrorUnknownOption" xml:space="preserve">
+    <value>Error: Opción desconocida '{0}'</value>
+    <comment>Mensaje de error para opción de línea de comandos desconocida</comment>
+  </data>
+  <data name="ErrorMissingLocaleValue" xml:space="preserve">
+    <value>Error: --locale requiere un valor (ej., en-US, es-ES)</value>
+    <comment>Mensaje de error cuando la opción de idioma no tiene valor</comment>
+  </data>
+  <data name="ErrorInvalidLocale" xml:space="preserve">
+    <value>Error: Idioma inválido '{0}'. Usando idioma predeterminado.</value>
+    <comment>Mensaje de error para formato de idioma inválido</comment>
+  </data>
 </root>
