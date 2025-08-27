@@ -230,7 +230,16 @@ namespace SharpFetch {
                 return ResourceManager.GetString("LabelMemory", resourceCulture);
             }
         }
-        
+
+        /// <summary>
+        ///   Looks up a localized string similar to Network:.
+        /// </summary>
+        internal static string LabelNetwork {
+            get {
+                return ResourceManager.GetString("LabelNetwork", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Looks up a localized string similar to OS:.
         /// </summary>
