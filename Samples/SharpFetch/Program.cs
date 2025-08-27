@@ -3,6 +3,7 @@ using System.Runtime.InteropServices;
 using System.Diagnostics;
 using System.IO;
 using System.Net.NetworkInformation;
+using System.Net.Sockets;
 using System.Linq;
 using System.Management;
 using System.Globalization;
@@ -244,9 +245,9 @@ public class SystemInfoFetcher
             info.Add($"{Bold}{Yellow}{Resources.LabelCPU}{Reset} {cpu}");
 
         // Memory
-        var memory = GetMemoryInfo();
-        if (!string.IsNullOrEmpty(memory))
-            info.Add($"{Bold}{Yellow}{Resources.LabelMemory}{Reset} {memory}");
+        // var memory = GetMemoryInfo();
+        // if (!string.IsNullOrEmpty(memory))
+        //     info.Add($"{Bold}{Yellow}{Resources.LabelMemory}{Reset} {memory}");
 
         // Shell
         var shell = GetShellInfo();
@@ -262,6 +263,40 @@ public class SystemInfoFetcher
         var dotnetVersion = GetDotNetVersion();
         if (!string.IsNullOrEmpty(dotnetVersion))
             info.Add($"{Bold}{Yellow}{Resources.LabelDotNet}{Reset} {dotnetVersion}");
+
+        // Memory
+        var TotalRam = GetTotalRam();
+        var UsedRam = GetUsedRam();
+
+        info.Add($"{Bold}{Yellow}{Resources.LabelMemory}{Reset} {TotalRam} / {UsedRam}");
+
+        // Network
+        var NetworkInterfaces = GetNetworkInfo();
+
+        if (NetworkInterfaces.Any())
+        {
+            info.Add($"{Bold}{Yellow}{Resources.LabelNetwork}{Reset}");
+            foreach (var network in NetworkInterfaces.Take(2)) // Limit to first 2 interfaces for space
+            {
+                var interfaceType = GetNetworkTypeShort(network.Type);
+                info.Add($"{Reset}  {network.Name} ({interfaceType})");
+
+                if (network.IPv4Addresses.Any())
+                {
+                    info.Add($"{Reset}    IPv4: {network.IPv4Addresses.First()}");
+                }
+                
+                if (network.IPv6Addresses.Any())
+                {
+                    var ipv6 = network.IPv6Addresses.First();
+                    if (ipv6.Length > 25) ipv6 = ipv6.Substring(0, 22) + "...";
+                    info.Add($"{Reset}    IPv6: {ipv6}");
+                }
+            }
+            info.Add("");
+        }
+
+
 
         info.Add("");
         
@@ -280,7 +315,14 @@ public class SystemInfoFetcher
             {
                 var version = Environment.OSVersion;
                 var build = GetWindowsBuild();
-                return string.Format(Resources.WindowsOSFormat, version.Version.Major, version.Version.Minor, build);
+                var WinNum = version.Version.Major;
+
+                // if ((WinNum < 11) && (Convert.ToInt32(build) >= 22000))
+                // {
+                //     WinNum = 11;
+                // }
+
+                return string.Format(Resources.WindowsOSFormat, WinNum, version.Version.Minor, build);
             }
             catch
             {
@@ -400,36 +442,36 @@ public class SystemInfoFetcher
         return string.Format(Resources.CPUCoresFormat, Environment.ProcessorCount);
     }
 
-    private string GetMemoryInfo()
-    {
-        try
-        {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                using var searcher = new ManagementObjectSearcher("select * from Win32_OperatingSystem");
-                foreach (ManagementObject obj in searcher.Get())
-                {
-                    var totalMem = Convert.ToUInt64(obj["TotalVisibleMemorySize"]) * 1024;
-                    var availMem = Convert.ToUInt64(obj["AvailablePhysicalMemory"]) * 1024;
-                    var usedMem = totalMem - availMem;
+    // private string GetMemoryInfo()
+    // {
+    //     try
+    //     {
+    //         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+    //         {
+    //             using var searcher = new ManagementObjectSearcher("select * from Win32_OperatingSystem");
+    //             foreach (ManagementObject obj in searcher.Get())
+    //             {
+    //                 var totalMem = Convert.ToUInt64(obj["TotalVisibleMemorySize"]) * 1024;
+    //                 var availMem = Convert.ToUInt64(obj["AvailablePhysicalMemory"]) * 1024;
+    //                 var usedMem = totalMem - availMem;
                     
-                    return string.Format(Resources.MemoryUsageFormat, FormatBytes(usedMem), FormatBytes(totalMem));
-                }
-            }
-            else
-            {
-                var memInfo = File.ReadAllText("/proc/meminfo");
-                var memTotal = GetMemInfoValue(memInfo, "MemTotal") * 1024;
-                var memAvailable = GetMemInfoValue(memInfo, "MemAvailable") * 1024;
-                var memUsed = memTotal - memAvailable;
+    //                 return string.Format(Resources.MemoryUsageFormat, FormatBytes(usedMem), FormatBytes(totalMem));
+    //             }
+    //         }
+    //         else
+    //         {
+    //             var memInfo = File.ReadAllText("/proc/meminfo");
+    //             var memTotal = GetMemInfoValue(memInfo, "MemTotal") * 1024;
+    //             var memAvailable = GetMemInfoValue(memInfo, "MemAvailable") * 1024;
+    //             var memUsed = memTotal - memAvailable;
                 
-                return string.Format(Resources.MemoryUsageFormat, FormatBytes(memUsed), FormatBytes(memTotal));
-            }
-        }
-        catch { }
+    //             return string.Format(Resources.MemoryUsageFormat, FormatBytes(memUsed), FormatBytes(memTotal));
+    //         }
+    //     }
+    //     catch { }
 
-        return "";
-    }
+    //     return "";
+    // }
 
     private string GetShellInfo()
     {
@@ -583,6 +625,197 @@ public class SystemInfoFetcher
         return 0;
     }
 
+    private string GetTotalRam()
+    {
+        try
+        {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                return GetWindowsTotalRam();
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                return GetLinuxTotalRam();
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                return GetMacTotalRam();
+            }
+        }
+        catch
+        {
+            // Ignore errors
+        }
+        return "Unknown";
+    }
+
+    [SupportedOSPlatform("windows")]
+    private string GetWindowsTotalRam()
+    {
+        try
+        {
+            using (var searcher = new ManagementObjectSearcher("select * from Win32_PhysicalMemory"))
+            {
+                ulong totalBytes = 0;
+                foreach (ManagementObject obj in searcher.Get())
+                {
+                    //totalBytes += Convert.ToInt64(obj["Capacity"]);
+                    totalBytes += Convert.ToUInt64(obj["Capacity"]);
+                }
+                return FormatBytes(totalBytes);
+            }
+        }
+        catch
+        {
+            return "Unknown";
+        }
+    }
+
+    private string GetLinuxTotalRam()
+    {
+        try
+        {
+            var memInfo = File.ReadAllText("/proc/meminfo");
+            var lines = memInfo.Split('\n');
+            var totalLine = lines.FirstOrDefault(l => l.StartsWith("MemTotal:"));
+            if (totalLine != null)
+            {
+                var parts = totalLine.Split(new char[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+                if (parts.Length >= 2 && ulong.TryParse(parts[1], out ulong kb))
+                {
+                    return FormatBytes(kb * 1024);
+                }
+            }
+        }
+        catch
+        {
+            // Ignore errors
+        }
+        return "Unknown";
+    }
+
+    private string GetMacTotalRam()
+    {
+        try
+        {
+            var process = new Process
+            {
+                StartInfo = new ProcessStartInfo
+                {
+                    FileName = "sysctl",
+                    Arguments = "-n hw.memsize",
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true,
+                    CreateNoWindow = true
+                }
+            };
+            process.Start();
+            var result = process.StandardOutput.ReadToEnd().Trim();
+            process.WaitForExit();
+            if (ulong.TryParse(result, out ulong bytes))
+            {
+                return FormatBytes(bytes);
+            }
+        }
+        catch
+        {
+            // Ignore errors
+        }
+        return "Unknown";
+    }
+
+    private string GetUsedRam()
+    {
+        try
+        {
+            var currentProcess = Process.GetCurrentProcess();
+            var workingSet = currentProcess.WorkingSet64;
+            return FormatBytes((ulong)workingSet);
+        }
+        catch
+        {
+            return "Unknown";
+        }
+    }
+
+        private List<NetworkInfo> GetNetworkInfo()
+        {
+            var networks = new List<NetworkInfo>();
+            
+            try
+            {
+                var interfaces = NetworkInterface.GetAllNetworkInterfaces();
+                
+                foreach (var iface in interfaces)
+                {
+                    try
+                    {
+                        // Skip loopback and non-operational interfaces for cleaner output
+                        if (iface.NetworkInterfaceType == NetworkInterfaceType.Loopback ||
+                            iface.OperationalStatus != OperationalStatus.Up)
+                            continue;
+
+                        var networkInfo = new NetworkInfo
+                        {
+                            Name = iface.Name,
+                            Description = iface.Description,
+                            Type = iface.NetworkInterfaceType,
+                            Status = iface.OperationalStatus,
+                            Speed = iface.Speed
+                        };
+
+                        // Get MAC address
+                        var physicalAddress = iface.GetPhysicalAddress();
+                        if (physicalAddress != null && physicalAddress.GetAddressBytes().Length > 0)
+                        {
+                            networkInfo.MacAddress = string.Join(":", 
+                                physicalAddress.GetAddressBytes().Select(b => b.ToString("X2")));
+                        }
+
+                        // Get IP addresses
+                        var ipProperties = iface.GetIPProperties();
+                        foreach (var unicastAddress in ipProperties.UnicastAddresses)
+                        {
+                            var address = unicastAddress.Address;
+                            if (address.AddressFamily == AddressFamily.InterNetwork)
+                            {
+                                networkInfo.IPv4Addresses.Add(address.ToString());
+                            }
+                            else if (address.AddressFamily == AddressFamily.InterNetworkV6 &&
+                                     !address.IsIPv6LinkLocal && !address.IsIPv6SiteLocal)
+                            {
+                                networkInfo.IPv6Addresses.Add(address.ToString());
+                            }
+                        }
+
+                        // Only add interfaces that have IP addresses
+                        if (networkInfo.IPv4Addresses.Any() || networkInfo.IPv6Addresses.Any())
+                        {
+                            networks.Add(networkInfo);
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        // Skip problematic interfaces
+                        continue;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                // If we can't get network info, add a placeholder
+                networks.Add(new NetworkInfo
+                {
+                    Name = "Unknown",
+                    Description = "Unable to retrieve network information",
+                    Status = OperationalStatus.Unknown
+                });
+            }
+            
+            return networks;
+        }
+
+
     private void DisplayWithAscii(string[] ascii, string[] info)
     {
         var maxLines = Math.Max(ascii.Length, info.Length);
@@ -604,4 +837,33 @@ public class SystemInfoFetcher
     {
         return System.Text.RegularExpressions.Regex.Replace(input, @"\u001b\[[0-9;]*m", "");
     }
+
+    private string GetNetworkTypeShort(NetworkInterfaceType type)
+    {
+        return type switch
+        {
+            NetworkInterfaceType.Ethernet => "Ethernet",
+            NetworkInterfaceType.Wireless80211 => "WiFi",
+            NetworkInterfaceType.Ppp => "PPP",
+            NetworkInterfaceType.Loopback => "Loopback",
+            NetworkInterfaceType.Tunnel => "Tunnel",
+            _ => type.ToString()
+        };
+    }
+
+}
+
+/// <summary>
+/// Contains network interface information
+/// </summary>
+public class NetworkInfo
+{
+    public string Name { get; set; } = "Unknown";
+    public string Description { get; set; } = "Unknown";
+    public NetworkInterfaceType Type { get; set; }
+    public OperationalStatus Status { get; set; }
+    public List<string> IPv4Addresses { get; set; } = new List<string>();
+    public List<string> IPv6Addresses { get; set; } = new List<string>();
+    public string MacAddress { get; set; } = "Unknown";
+    public long Speed { get; set; }
 }
