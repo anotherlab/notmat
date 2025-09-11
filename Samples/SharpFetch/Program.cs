@@ -5,7 +5,9 @@ using System.IO;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Linq;
+#if WINDOWS
 using System.Management;
+#endif
 using System.Globalization;
 using System.Runtime.Versioning;
 
@@ -41,6 +43,7 @@ class Program
 
         var fetcher = new SystemInfoFetcher();
         fetcher.DisplaySystemInfo();
+        
     }
 
     private static CommandLineOptions ParseArguments(string[] args)
@@ -419,6 +422,7 @@ public class SystemInfoFetcher
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
+#if WINDOWS
                 using var searcher = new ManagementObjectSearcher("select * from Win32_Processor");
                 foreach (ManagementObject obj in searcher.Get())
                 {
@@ -426,6 +430,7 @@ public class SystemInfoFetcher
                     if (!string.IsNullOrEmpty(name))
                         return name;
                 }
+#endif
             }
             else
             {
@@ -531,6 +536,7 @@ public class SystemInfoFetcher
     [SupportedOSPlatform("windows")]
     private string GetWindowsBuild()
     {
+#if WINDOWS
         try
         {
             using var searcher = new ManagementObjectSearcher("select * from Win32_OperatingSystem");
@@ -540,6 +546,7 @@ public class SystemInfoFetcher
             }
         }
         catch { }
+#endif
         return "";
     }
 
@@ -609,6 +616,7 @@ public class SystemInfoFetcher
 
     private int GetParentProcessId(int processId)
     {
+#if WINDOWS
         try
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
@@ -622,6 +630,7 @@ public class SystemInfoFetcher
             }
         }
         catch { }
+#endif
         return 0;
     }
 
@@ -652,6 +661,7 @@ public class SystemInfoFetcher
     [SupportedOSPlatform("windows")]
     private string GetWindowsTotalRam()
     {
+#if WINDOWS
         try
         {
             using (var searcher = new ManagementObjectSearcher("select * from Win32_PhysicalMemory"))
@@ -669,6 +679,8 @@ public class SystemInfoFetcher
         {
             return "Unknown";
         }
+#endif
+        return "Unknown";
     }
 
     private string GetLinuxTotalRam()
